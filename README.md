@@ -62,6 +62,7 @@ Mapping ldap://192.168.1.10:1389/o=websphere1 to artsploit.controllers.WebSphere
 Mapping ldap://192.168.1.10:1389/o=websphere1,wsdl=* to artsploit.controllers.WebSphere1
 Mapping ldap://192.168.1.10:1389/o=websphere2 to artsploit.controllers.WebSphere2
 Mapping ldap://192.168.1.10:1389/o=websphere2,jar=* to artsploit.controllers.WebSphere2
+Mapping ldap://192.168.0.166:1389/o=h2 to artsploit.controllers.H2
 ```
 
 ### Building
