@@ -10,8 +10,7 @@ import java.net.UnknownHostException;
 public class Config {
 
     @Parameter(names = {"-c", "--command"}, description = "Command to execute on the target server", order = 0)
-//    public static String command = "/Applications/Calculator.app/Contents/MacOS/Calculator";
-    public static String command = "touch /Users/fli/pwn.txt";
+    public static String command = "touch /usr/local/tomcat/temp/pwn.txt";
 
     @Parameter(names = {"-n", "--hostname"}, description = "Local HTTP server hostname " +
             "(required for remote classloading and websphere payloads)", order = 1)

