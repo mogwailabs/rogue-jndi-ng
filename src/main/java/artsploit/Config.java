@@ -11,6 +11,7 @@ public class Config {
 
     @Parameter(names = {"-c", "--command"}, description = "Command to execute on the target server", order = 0)
     public static String command = "touch /usr/local/tomcat/temp/pwn.txt";
+//    public static String command = "touch /Users/fli/Research/pwn.txt";
 
     @Parameter(names = {"-n", "--hostname"}, description = "Local HTTP server hostname " +
             "(required for remote classloading and websphere payloads)", order = 1)
@@ -39,6 +40,9 @@ public class Config {
 
     @Parameter(names = {"--h2"}, description = "[H2 database init script file", order = 6)
     public static String h2 = "/h2";
+
+    @Parameter(names = {"--js-payload-path"}, description = "[H2 database init script file", order = 7)
+    public static String jsPayloadPath = "";
 
     @Parameter(names = {"-h", "--help"}, help = true, description = "Show this help")
     private static boolean help = false;
