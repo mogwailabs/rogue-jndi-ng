@@ -41,8 +41,15 @@ Usage: java -jar target/RogueJndi-1.0.jar [options]
                       file should be located on the remote server) (default: 
                       ../../../../../tmp/jar_cache7808167489549525095.tmp) 
     --h2              [H2 database init script file (default: /h2)
-    --js-payload-path [H2 database init script file (default: <empty string>)
-    -h, --help        Show this help
+    --js-payload-path     [Tomcat Nashorn payload option] Path to a .js file 
+                          containing the payload served by the Tomcat 
+                          controllers; overwrites the -c option (default: 
+                          <empty string>)
+    --groovy-payload-path [Groovy payload option] Path to a .groovy file 
+                          containing the payload served by the Groovy 
+                          controller, overwrites the -c option (default: 
+                          <empty string>)
+    -h, --help            Show this help
 ```
 The most important parameters are the ldap server hostname (-n, should be accessible from the target) and the command you want to execute on the target server (-c).
  
