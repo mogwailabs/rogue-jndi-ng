@@ -41,8 +41,11 @@ public class Config {
     @Parameter(names = {"--h2"}, description = "[H2 database init script file", order = 6)
     public static String h2 = "/h2";
 
-    @Parameter(names = {"--js-payload-path"}, description = "[H2 database init script file", order = 7)
+    @Parameter(names = {"--js-payload-path"}, description = "[Path to a .js file containing the payload served by the Tomcat controllers; overwrites the -c option", order = 7)
     public static String jsPayloadPath = "";
+
+    @Parameter(names = {"--groovy-payload-path"}, description = "Path to a .groovy file containing the payload served by the Groovy controller, overwrites the -c option", order = 8)
+    public static String groovyPayloadPath= "";
 
     @Parameter(names = {"-h", "--help"}, help = true, description = "Show this help")
     private static boolean help = false;
