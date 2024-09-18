@@ -12,20 +12,16 @@ import javax.naming.StringRefAddr;
 
 import static artsploit.Utilities.serialize;
 
+// TODO: Add description and requirements.
 /**
  * Yields:
- *  RCE via arbitrary bean creation in {@link org.apache.naming.factory.BeanFactory}
- *  When bean is created on the server side, we can control its class name and setter methods,
- *   so we can leverage {@link javax.el.ELProcessor#eval} method to execute arbitrary Java code via EL evaluation
+ *  RCE via H2 INIT script
  *
- * @see <a href="https://www.veracode.com/blog/research/exploiting-jndi-injections-java">exploitation details</a>
+ * @see <a href="https://mogwailabs.de/en/blog/2023/04/look-mama-no-templatesimpl/">exploitation details</a>
 
  * Requires:
- *  Tomcat 8+ or SpringBoot 1.2.x+ in classpath
- *  - tomcat-embed-core.jar
- *  - tomcat-embed-el.jar
  *
- * @author artsploit // TODO FJL: Isn't HMM the author?
+ * @author h0ng10
  */
 @LdapMapping(uri = { "/o=h2" })
 public class H2 implements LdapController {
