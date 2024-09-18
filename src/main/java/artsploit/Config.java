@@ -11,7 +11,6 @@ public class Config {
 
     @Parameter(names = {"-c", "--command"}, description = "Command to execute on the target server", order = 0)
     public static String command = "touch /usr/local/tomcat/temp/pwn.txt";
-//    public static String command = "touch /Users/fli/Research/pwn.txt";
 
     @Parameter(names = {"-n", "--hostname"}, description = "Local HTTP server hostname " +
             "(required for remote classloading and websphere payloads)", order = 1)
@@ -46,6 +45,9 @@ public class Config {
 
     @Parameter(names = {"--groovy-payload-path"}, description = "[Groovy payload option] Path to a .groovy file containing the payload served by the Groovy controller, overwrites the -c option", order = 8)
     public static String groovyPayloadPath= "";
+
+    @Parameter(names = {"--generic-payload-path"}, description = "[Generic controller option] Path to a file containing a serialized object served by the Generic controller, overwrites the -c option", order = 8)
+    public static String genericPayloadPath = "";
 
     @Parameter(names = {"-h", "--help"}, help = true, description = "Show this help")
     private static boolean help = false;
