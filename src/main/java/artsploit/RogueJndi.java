@@ -6,7 +6,7 @@ public class RogueJndi {
         System.out.println(
             "+-+-+-+-+-+-+-+-+-+\n" +
             "|R|o|g|u|e|J|n|d|i|\n" +
-            "+-+-+-+-+-+-+-+-+-+"
+            "+-+-+-+-+-+-+-+-+-+\n"
         );
         Config.applyCmdArgs(args);
         HttpServer.start();
