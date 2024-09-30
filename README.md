@@ -66,6 +66,7 @@ Starting LDAP server on 0.0.0.0:1389
 Mapping ldap://192.168.0.166:1389/o=h2 to artsploit.controllers.H2
 Mapping ldap://192.168.0.166:1389/o=tomcat to artsploit.controllers.Tomcat
 Mapping ldap://192.168.0.166:1389/o=tomcat10 to artsploit.controllers.Tomcat10
+Mapping ldap://192.168.0.166:1389/o=hsqldb to artsploit.controllers.HSQLDB
 Mapping ldap://192.168.0.166:1389/o=websphere2 to artsploit.controllers.WebSphere2
 Mapping ldap://192.168.0.166:1389/o=websphere2,jar=* to artsploit.controllers.WebSphere2
 Mapping ldap://192.168.0.166:1389/o=tomcat10-jshell to artsploit.controllers.Tomcat10JShell

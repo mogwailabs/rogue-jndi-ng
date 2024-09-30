@@ -46,8 +46,11 @@ public class Config {
     @Parameter(names = {"--groovy-payload-path"}, description = "[Groovy payload option] Path to a .groovy file containing the payload served by the Groovy controller, overwrites the -c option", order = 8)
     public static String groovyPayloadPath= "";
 
-    @Parameter(names = {"--generic-payload-path"}, description = "[Generic controller option] Path to a file containing a serialized object served by the Generic controller, overwrites the -c option", order = 8)
+    @Parameter(names = {"--generic-payload-path"}, description = "[Generic controller option] Path to a file containing a serialized object served by the Generic controller, overwrites the -c option", order = 9)
     public static String genericPayloadPath = "";
+
+    @Parameter(names = {"--jdbc-url"}, description = "[HSQLDB controller option] JDBC URL pointing to an HSQL database", order = 10)
+    public static String jdbcURL= "";
 
     @Parameter(names = {"-h", "--help"}, help = true, description = "Show this help")
     private static boolean help = false;
