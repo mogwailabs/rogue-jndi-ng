@@ -43,7 +43,7 @@ public class Config {
     @Parameter(names = {"--js-payload-path"}, description = "[Tomcat Nashorn payload option] Path to a .js file containing the payload served by the Tomcat controllers; overwrites the -c option", order = 7)
     public static String jsPayloadPath = "";
 
-    @Parameter(names = {"--jshell-payload-path"}, description = "[Tomcat Nashorn payload option] Path to a .js file containing the payload served by the Tomcat controllers; overwrites the -c option", order = 8)
+    @Parameter(names = {"--jshell-payload-path"}, description = "[Tomcat JShell payload option] Path to a .java file containing the payload served by the Tomcat controllers; overwrites the -c option", order = 8)
     public static String jshellPayloadPath = "";
 
     @Parameter(names = {"--groovy-payload-path"}, description = "[Groovy payload option] Path to a .groovy file containing the payload served by the Groovy controller, overwrites the -c option", order = 9)

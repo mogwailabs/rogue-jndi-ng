@@ -30,7 +30,6 @@ import static artsploit.Utilities.serialize;
  *  - tomcat-embed-el.jar
  *
  * @author artsploit
- * @author
  */
 @LdapMapping(uri = { "/o=tomcat" })
 public class Tomcat implements LdapController {
