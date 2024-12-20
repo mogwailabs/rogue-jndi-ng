@@ -12,7 +12,6 @@ import javax.naming.StringRefAddr;
 
 import static artsploit.Utilities.serialize;
 
-// TODO: Add description and requirements.
 /**
  * Yields:
  *  RCE via H2 INIT script
@@ -20,6 +19,7 @@ import static artsploit.Utilities.serialize;
  * @see <a href="https://mogwailabs.de/en/blog/2023/04/look-mama-no-templatesimpl/">exploitation details</a>
 
  * Requires:
+ *  H2 dependency in classpath
  *
  * @author h0ng10
  */

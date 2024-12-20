@@ -10,7 +10,6 @@ import com.unboundid.ldap.sdk.ResultCode;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-// TODO: Add appropriate comment.
 /**
  * Yields:
  * Reads the bytes of a specified file (via --generic-payload-path) and sends them as "Serializable Object" to the target application.

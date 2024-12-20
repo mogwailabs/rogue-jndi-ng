@@ -1,6 +1,7 @@
 # ROGUE JNDI NG
 <img src="resources/logo.webp" alt="A bug sitting on top of a Stormtrooper helmet" height="640" width="640" style="border-radius: 14%; overflow: hidden;">
 
+
 A modern fork of [Rogue JNDI](https://github.com/artsploit/rogue-jndi), which is "a malicious LDAP server for JNDI injection attacks".
 
 ## Description
@@ -74,7 +75,7 @@ Usage: java -jar target/RogueJndi-1.0.jar [options]
     -h, --help             Show this help
 ```
 
-## Example usage with custom JShell script.
+## Example usage with custom JShell script
 First, start the test container:
 ```shell
 docker run -it -p 8080:8080 ghcr.io/thegebirge/jndi-outcast/tomcat-10-jshell:latest
