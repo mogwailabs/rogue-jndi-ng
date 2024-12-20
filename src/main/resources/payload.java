@@ -5,7 +5,7 @@ new Runnable() {
     @Override
     public void run() {
         try {
-            var runnable = """
+            var runner = """
                     ⠀⠀⠀⠀⠀⠀⠀⣰⣾⠟⠛⠓⠒⠚⠃⠉⠛⠒⠖⠋⠉⠉⠛⠻⠶⠶⠚⠛⠈⠉⠙⠓⠶⠲⠞⠋⣉⠋⠛⠷⠲⠒⠖⠛⠛⠲⢦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
                     ⠀⠀⠀⠀⠀⠀⢰⣿⠟⣧⠀⠀⡀⢰⢧⢳⢦⠀⡀⠀⠂⠠⠀⢶⣄⣈⣷⣀⣺⠇⠀⠀⡀⠘⣷⣠⠿⢦⣴⡟⠀⠀⢀⠠⡶⡄⠈⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
                     ⠀⠀⠀⠀⠀⢀⣾⠏⠀⠌⠳⣄⠀⠈⢯⣚⡬⠗⠀⡀⠁⡀⣤⠞⠉⠁⠀⠈⠉⠳⢮⡀⢀⡞⠉⠀⠀⠀⠀⠉⠳⣄⠂⠀⠓⠋⠀⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -38,7 +38,7 @@ new Runnable() {
                     ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠿⠿⠟⠁⠸⣦⣠⡾⠃⠀⠀⠀⠀⠀  (Hello from the Runnable!)⠀⠀⠀⠀⠀
                 """;
 
-            System.out.println(runnable);
+            System.out.println(runner);
 
             var processBuilder = new java.lang.ProcessBuilder("touch", "/usr/local/tomcat/temp/pwn.txt");
             var process = processBuilder.start();
