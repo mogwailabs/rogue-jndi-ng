@@ -78,7 +78,7 @@ Usage: java -jar target/RogueJndi-1.0.jar [options]
 ## Example usage with custom JShell script
 First, start the test container:
 ```shell
-docker run -it -p 8080:8080 ghcr.io/thegebirge/jndi-outcast/tomcat-10-jshell:latest
+docker run -it -p 8080:8080 ghcr.io/mogwailabs/jndi-outcast/tomcat-10-jshell:latest
 ```
 
 After cloning and building the project, start the server:
