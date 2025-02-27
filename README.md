@@ -13,6 +13,7 @@ You can read about the full extent of our improvements in our [blog post](https:
 + Users can provide whole script files instead of single OS commands
 + Endpoint for serving generic deserialization payloads
 + New endpoint for exploiting H2 
++ New endpoint for exploiting targets with C3P0 
 + New endpoint for exploiting HSQLDB
 + The usage of [Testcontainers](https://github.com/testcontainers/testcontainers-java) for integration tests (also useful for manual testing, e.g. custom scripting payloads)
 
