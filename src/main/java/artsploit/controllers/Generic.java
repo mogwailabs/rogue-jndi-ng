@@ -25,7 +25,7 @@ public class Generic implements LdapController {
     public void sendResult(InMemoryInterceptedSearchResult result, String base) throws Exception {
         if (Config.genericPayloadPath.isEmpty()) throw new Exception("--generic-payload-path must be set");
 
-        var payload = Files.readAllBytes(Path.of(Config.genericPayloadPath));
+        byte[] payload = Files.readAllBytes(Path.of(Config.genericPayloadPath));
 
         System.out.println("Sending LDAP Serializable Object (inline payload)");
 
