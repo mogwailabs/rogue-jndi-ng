@@ -8,7 +8,7 @@ import com.unboundid.ldap.sdk.LDAPResult;
 import com.unboundid.ldap.sdk.ResultCode;
 
 import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Yields:
@@ -25,7 +25,7 @@ public class Generic implements LdapController {
     public void sendResult(InMemoryInterceptedSearchResult result, String base) throws Exception {
         if (Config.genericPayloadPath.isEmpty()) throw new Exception("--generic-payload-path must be set");
 
-        byte[] payload = Files.readAllBytes(Path.of(Config.genericPayloadPath));
+        byte[] payload = Files.readAllBytes(Paths.get(Config.genericPayloadPath));
 
         System.out.println("Sending LDAP Serializable Object (inline payload)");
 

